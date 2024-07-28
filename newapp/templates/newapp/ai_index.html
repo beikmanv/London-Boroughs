@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Pathfinding Solver</title>
+</head>
+<body>
+    <h1>AI Pathfinding Solver</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="initial_state">Initial Borough:</label>
+        <select id="initial_state" name="initial_state">
+            {% for borough in boroughs %}
+                <option value="{{ borough }}">{{ borough }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="goal_state">Goal Borough:</label>
+        <select id="goal_state" name="goal_state">
+            {% for borough in boroughs %}
+                <option value="{{ borough }}">{{ borough }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <button type="submit">Solve</button>
+    </form>
+</body>
+</html>

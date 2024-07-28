@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home Page</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        #map {
+            height: 600px;
+            margin-top: 20px;
+        }
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to the AI Pathfinding Application</h1>
+        <p>This map shows all available stops and destinations (boroughs of London).</p>
+        <div id="map"></div>
+        <a href="{% url 'ai_index' %}">Solve an AI Problem</a>
+    </div>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Borough coordinates
+        const boroughs = {
+            'Camden': [51.5290, -0.1255],
+            'Greenwich': [51.4892, 0.0648],
+            'Hackney': [51.5450, -0.0554],
+            'Hammersmith': [51.4928, -0.2230],
+            'Islington': [51.5380, -0.1030],
+            'Kensington': [51.5010, -0.1930],
+            'Lambeth': [51.4654, -0.1136],
+            'Lewisham': [51.4522, -0.0148],
+            'Southwark': [51.5035, -0.0804],
+            'Westminster': [51.4975, -0.1357]
+        };
+
+        // Initialize the map
+        const map = L.map('map').setView([51.505, -0.09], 12);
+
+        // Load map tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Add markers for each borough
+        for (const [borough, coords] of Object.entries(boroughs)) {
+            L.marker(coords).addTo(map).bindPopup(borough);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Pathfinding Solver Results</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        #map {
+            height: 600px;
+            margin-top: 20px;
+        }
+        .results {
+            text-align: left;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: #f2f2f2;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI Pathfinding Solver Results</h1>
+        <div class="results">
+            <p><strong>Initial Borough:</strong> {{ initial }}</p>
+            <p><strong>Goal Borough:</strong> {{ goal }}</p>
+            <h2>Path Found</h2>
+            <ul>
+                {% for state in path %}
+                    <li>{{ state }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div id="map"></div>
+        <a href="{% url 'ai_index' %}">Solve Another Problem</a>
+    </div>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        const boroughs = {
+            "Camden": [51.5290, -0.1255],
+            "Greenwich": [51.4892, 0.0648],
+            "Hackney": [51.5450, -0.0554],
+            "Hammersmith": [51.4928, -0.2230],
+            "Islington": [51.5380, -0.1030],
+            "Kensington": [51.5010, -0.1930],
+            "Lambeth": [51.4654, -0.1136],
+            "Lewisham": [51.4522, -0.0148],
+            "Southwark": [51.5035, -0.0804],
+            "Westminster": [51.4975, -0.1357]
+        };
+
+        const map = L.map('map').setView([51.505, -0.09], 12);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        for (const [borough, coords] of Object.entries(boroughs)) {
+            L.marker(coords).addTo(map).bindPopup(borough);
+        }
+
+        // Handle the polyline data for the start and end points
+        const polylineData = JSON.parse('{{ polyline|escapejs }}');
+        console.log('Polyline:', polylineData);
+
+        if (polylineData.length > 1) {
+            const pathLine = L.polyline(polylineData, { color: 'blue' }).addTo(map);
+            map.fitBounds(pathLine.getBounds());
+        }
+    </script>
+</body>
+</html>
